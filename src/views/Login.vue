@@ -1,21 +1,102 @@
 <!-- eslint-disable vue/multi-word-component-names -->
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+import { useToast } from 'primevue/usetoast'
+
+import AuthService from '@/services/auth.service'
 
 import booksplant from '@/assets/BooksPlants.png'
 import bookpen from '@/assets/BookPen.png'
 import crescent from '@/assets/Crescent.png'
 
+const router = useRouter()
+const toast = useToast()
+
+// ======================
+// FORM DATA
+// ======================
+
 const email = ref('')
 const password = ref('')
+const remember = ref(false)
+
+const loading = ref(false)
+
+// ======================
+// LOGIN
+// ======================
+
+const login = async () => {
+  if (!email.value.trim()) {
+    toast.add({
+      severity: 'warn',
+      summary: 'Email Required',
+      detail: 'Please enter your email.',
+      life: 3000,
+    })
+    return
+  }
+
+  if (!password.value.trim()) {
+    toast.add({
+      severity: 'warn',
+      summary: 'Password Required',
+      detail: 'Please enter your password.',
+      life: 3000,
+    })
+    return
+  }
+
+  try {
+    loading.value = true
+
+    const response = await AuthService.login({
+      email: email.value,
+      password: password.value,
+    })
+
+    console.log(response.data)
+
+    // Save user temporarily
+    localStorage.setItem('user', JSON.stringify(response.data.data))
+
+    toast.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: response.data.message,
+      life: 2000,
+    })
+
+    await router.push('/home')
+  } catch (error: any) {
+    console.error(error)
+
+    toast.add({
+      severity: 'error',
+      summary: 'Login Failed',
+      detail:
+        error.response?.data?.message ??
+        'Invalid email or password.',
+      life: 3500,
+    })
+  } finally {
+    loading.value = false
+  }
+}
 </script>
 
 <template>
+  <Toast />
+
   <div class="login-page">
-    <!-- LEFT SIDE -->
+    <!-- ===========================
+         LEFT SIDE
+    ============================ -->
     <div class="left-section">
       <div class="left-content">
-        <!-- Logo -->
         <div class="logo-area">
           <img :src="crescent" class="crescent-logo" alt="crescent" />
 
@@ -24,89 +105,128 @@ const password = ref('')
           <h2>Quizzes</h2>
 
           <p class="tagline">
-            Test your knowledge.<br />
-            Challenge yourself.<br />
+            Test your knowledge.
+            <br />
+
+            Challenge yourself.
+            <br />
+
             <span>Grow every day.</span>
           </p>
         </div>
 
-        <!-- Books Illustration -->
         <div class="books-area">
-          <img :src="booksplant" class="books-image" alt="books" />
+          <img :src="booksplant" class="books-image" alt="Books" />
         </div>
       </div>
 
-      <!-- Bottom Wave -->
       <div class="bottom-wave">
-        <div class="wave-text">“Learning is a treasure that will follow its owner everywhere.”</div>
+        <div class="wave-text">
+          "Learning is a treasure that will follow its owner
+          everywhere."
+        </div>
       </div>
     </div>
 
-    <!-- RIGHT SIDE -->
+    <!-- ===========================
+         RIGHT SIDE
+    ============================ -->
+
     <div class="right-section">
       <div class="login-card">
-        <!-- Top Icon -->
         <div class="top-icon-wrapper">
           <div class="icon-bg"></div>
 
-          <img :src="bookpen" class="book-pen" alt="book pen" />
+          <img :src="bookpen" class="book-pen" alt="Book Pen" />
         </div>
 
         <h2>Welcome Back!</h2>
 
-        <p class="subtitle">Log in to continue your quiz journey</p>
+        <p class="subtitle">
+          Log in to continue your quiz journey
+        </p>
 
-        <!-- Email -->
+        <!-- ======================
+             EMAIL
+        ======================= -->
+
         <div class="input-group">
           <label>Email</label>
 
-          <div class="input-wrapper">
-            <span class="input-icon">✉</span>
-
-            <input v-model="email" type="email" placeholder="Enter your email" />
-          </div>
+          <InputText v-model="email" placeholder="Enter your email" class="w-full custom-input" @keyup.enter="login" />
         </div>
 
-        <!-- Password -->
+        <!-- ======================
+             PASSWORD
+        ======================= -->
+
         <div class="input-group">
           <label>Password</label>
 
-          <div class="input-wrapper">
-            <span class="input-icon">🔒</span>
-
-            <input v-model="password" type="password" placeholder="Enter your password" />
-          </div>
+          <Password v-model="password" placeholder="Enter your password" :feedback="false" toggleMask fluid
+            class="w-full custom-password" inputClass="custom-password-input" @keyup.enter="login" />
         </div>
 
-        <!-- Options -->
+        <!-- ======================
+             REMEMBER
+        ======================= -->
+
         <div class="options">
-          <label class="remember">
-            <input type="checkbox" />
-            Remember me
-          </label>
+          <div class="remember-option">
+            <Checkbox v-model="remember" binary inputId="remember" />
 
-          <a href="#">Forgot password?</a>
+            <label for="remember">
+              Remember me
+            </label>
+          </div>
+
+          <a href="#">
+            Forgot Password?
+          </a>
         </div>
 
-        <!-- Login Button -->
-        <button class="login-btn">→ Log In</button>
+        <!-- ======================
+             LOGIN BUTTON
+        ======================= -->
 
-        <!-- Divider -->
+        <Button label="Log In" icon="pi pi-sign-in" class="login-btn" :loading="loading" @click="login" />
+
+        <!-- ======================
+             DIVIDER
+        ======================= -->
+
         <div class="divider">
           <span>or continue with</span>
         </div>
 
-        <!-- Social -->
+        <!-- ======================
+             SOCIAL BUTTONS
+        ======================= -->
+
         <div class="social-buttons">
-          <button>Google</button>
+          <Button outlined severity="secondary" class="social-btn">
+            <i class="pi pi-google"></i>
 
-          <button>Microsoft</button>
+            <span>Google</span>
+          </Button>
+
+          <Button outlined severity="secondary" class="social-btn">
+            <i class="pi pi-microsoft"></i>
+
+            <span>Microsoft</span>
+          </Button>
         </div>
+        <!-- ======================
+             SIGNUP
+        ======================= -->
 
-        <p class="signup-text">
-          Don't have an account?
-          <span>Sign up</span>
-        </p>
+        <div class="signup-text">
+          <span>Don't have an account?</span>
+
+          <a href="#">
+            Sign Up
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -119,6 +239,18 @@ const password = ref('')
   box-sizing: border-box;
 
   font-family: Inter, sans-serif;
+}
+
+.input-wrapper input {
+  color: #101828;
+}
+
+.input-wrapper input::placeholder {
+  color: #98a2b3;
+}
+
+.login-card {
+  color: #101828;
 }
 
 .login-page {
@@ -684,7 +816,10 @@ const password = ref('')
 
   background: white;
 
+  color: #344054;
+
   font-size: 15px;
+
   font-weight: 600;
 
   cursor: pointer;
@@ -723,6 +858,19 @@ const password = ref('')
   font-weight: 700;
 
   cursor: pointer;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.login-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 /* =========================
@@ -764,5 +912,62 @@ const password = ref('')
   .book-pen {
     width: 90px;
   }
+}
+
+/* ===========================
+   PRIMEVUE INPUTS
+=========================== */
+
+:deep(.custom-input) {
+  width: 100%;
+  height: 52px;
+}
+
+:deep(.custom-input input) {
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  border: 1px solid #d0d5dd;
+  border-radius: 14px;
+}
+
+:deep(.custom-input::placeholder) {
+  color: #98a2b3;
+}
+
+:deep(.custom-password) {
+  width: 100%;
+}
+
+:deep(.custom-password .p-password-input) {
+  width: 100%;
+  height: 52px;
+
+  background: #ffffff !important;
+
+  color: #1f2937 !important;
+
+  border-radius: 14px;
+}
+
+:deep(.custom-password input) {
+  color: #1f2937 !important;
+
+  background: #ffffff !important;
+}
+
+:deep(.custom-input:focus),
+:deep(.custom-password .p-password-input:focus) {
+  border-color: #0d9b63 !important;
+
+  box-shadow: 0 0 0 4px rgba(13, 155, 99, 0.15);
+}
+
+:deep(.custom-password input::placeholder),
+:deep(.custom-input input::placeholder) {
+  color: #98a2b3 !important;
+}
+
+:deep(.p-password-toggle-mask) {
+  color: #667085;
 }
 </style>
