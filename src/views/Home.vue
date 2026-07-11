@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import QuizService from '@/services/quiz.service'
-
+import { useRouter } from 'vue-router'
 interface Quiz {
   id: number
   title: string
@@ -28,6 +28,16 @@ const loadQuizzes = async () => {
   }
 }
 
+const router = useRouter()
+
+const startQuiz = (quizId: number) => {
+  router.push({
+    name: 'Quiz',
+    params: {
+      id: quizId,
+    },
+  })
+}
 onMounted(() => {
   loadQuizzes()
 })
@@ -48,29 +58,15 @@ onMounted(() => {
 
       </div>
 
-      <Button
-        icon="pi pi-refresh"
-        label="Refresh"
-        @click="loadQuizzes"
-      />
+      <Button icon="pi pi-refresh" label="Refresh" @click="loadQuizzes" />
 
     </div>
 
-    <ProgressSpinner
-      v-if="loading"
-      class="spinner"
-    />
+    <ProgressSpinner v-if="loading" class="spinner" />
 
-    <div
-      v-else
-      class="quiz-grid"
-    >
+    <div v-else class="quiz-grid">
 
-      <Card
-        v-for="quiz in quizzes"
-        :key="quiz.id"
-        class="quiz-card"
-      >
+      <Card v-for="quiz in quizzes" :key="quiz.id" class="quiz-card">
 
         <template #title>
 
@@ -114,11 +110,7 @@ onMounted(() => {
 
         <template #footer>
 
-          <Button
-            label="Start Quiz"
-            icon="pi pi-play"
-            class="start-btn"
-          />
+          <Button label="Start Quiz" icon="pi pi-play" class="start-btn" @click="startQuiz(quiz.id)" />
 
         </template>
 
@@ -126,10 +118,7 @@ onMounted(() => {
 
     </div>
 
-    <div
-      v-if="!loading && quizzes.length === 0"
-      class="empty-state"
-    >
+    <div v-if="!loading && quizzes.length === 0" class="empty-state">
 
       <i class="pi pi-book"></i>
 
@@ -143,161 +132,159 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.home-page {
 
-.home-page{
+  min-height: 100vh;
 
-    min-height:100vh;
+  background: #f8fffb;
 
-    background:#f8fffb;
-
-    padding:50px;
+  padding: 50px;
 }
 
-.hero{
+.hero {
 
-    display:flex;
+  display: flex;
 
-    justify-content:space-between;
+  justify-content: space-between;
 
-    align-items:center;
+  align-items: center;
 
-    margin-bottom:40px;
+  margin-bottom: 40px;
 }
 
-.hero h1{
+.hero h1 {
 
-    color:#067647;
+  color: #067647;
 
-    font-size:42px;
+  font-size: 42px;
 
-    font-weight:800;
+  font-weight: 800;
 }
 
-.hero p{
+.hero p {
 
-    margin-top:10px;
+  margin-top: 10px;
 
-    color:#667085;
+  color: #667085;
 
-    font-size:18px;
+  font-size: 18px;
 }
 
-.quiz-grid{
+.quiz-grid {
 
-    display:grid;
+  display: grid;
 
-    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 
-    gap:30px;
+  gap: 30px;
 }
 
-.quiz-card{
+.quiz-card {
 
-    border-radius:25px;
+  border-radius: 25px;
 
-    transition:.35s;
+  transition: .35s;
 
-    border:1px solid #d7f5e5;
+  border: 1px solid #d7f5e5;
 
-    box-shadow:0 12px 35px rgba(0,0,0,.05);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, .05);
 }
 
-.quiz-card:hover{
+.quiz-card:hover {
 
-    transform:translateY(-8px);
+  transform: translateY(-8px);
 
-    box-shadow:0 18px 45px rgba(18,183,106,.18);
+  box-shadow: 0 18px 45px rgba(18, 183, 106, .18);
 }
 
-.quiz-info{
+.quiz-info {
 
-    display:flex;
+  display: flex;
 
-    flex-direction:column;
+  flex-direction: column;
 
-    gap:18px;
+  gap: 18px;
 
-    margin-top:10px;
+  margin-top: 10px;
 }
 
-.info-row{
+.info-row {
 
-    display:flex;
+  display: flex;
 
-    align-items:center;
+  align-items: center;
 
-    gap:12px;
+  gap: 12px;
 
-    color:#344054;
+  color: #344054;
 
-    font-size:15px;
+  font-size: 15px;
 }
 
-.info-row i{
+.info-row i {
 
-    color:#12b76a;
+  color: #12b76a;
 
-    font-size:18px;
+  font-size: 18px;
 }
 
-.start-btn{
+.start-btn {
 
-    width:100%;
+  width: 100%;
 
-    background:#12b76a;
+  background: #12b76a;
 
-    border:none;
+  border: none;
 }
 
-.spinner{
+.spinner {
 
-    display:block;
+  display: block;
 
-    margin:auto;
+  margin: auto;
 
-    margin-top:120px;
+  margin-top: 120px;
 }
 
-.empty-state{
+.empty-state {
 
-    text-align:center;
+  text-align: center;
 
-    margin-top:100px;
+  margin-top: 100px;
 }
 
-.empty-state i{
+.empty-state i {
 
-    font-size:80px;
+  font-size: 80px;
 
-    color:#12b76a;
+  color: #12b76a;
 }
 
-.empty-state h2{
+.empty-state h2 {
 
-    margin-top:20px;
+  margin-top: 20px;
 
-    color:#067647;
+  color: #067647;
 }
 
-.empty-state p{
+.empty-state p {
 
-    color:#667085;
+  color: #667085;
 
-    margin-top:10px;
+  margin-top: 10px;
 }
 
-:deep(.p-card-title){
+:deep(.p-card-title) {
 
-    color:#067647;
+  color: #067647;
 
-    font-size:24px;
+  font-size: 24px;
 
-    font-weight:700;
+  font-weight: 700;
 }
 
-:deep(.p-card){
+:deep(.p-card) {
 
-    background:white;
+  background: white;
 }
-
 </style>

@@ -21,6 +21,9 @@ class McqService {
   deleteMcq(id: number) {
     return api.delete(`/mcqs/${id}`);
   }
+  getQuizMcqs(id:number){
+        return api.get(`/quizzes/${id}/mcqs`)
+    }
 }
 
 export default new McqService();
