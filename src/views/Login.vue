@@ -70,7 +70,7 @@ const login = async () => {
       life: 2000,
     })
 
-    await router.push('/home')
+    await router.push('/quizzes')
   } catch (error: any) {
     console.error(error)
 
