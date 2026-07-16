@@ -3,6 +3,8 @@
 import { ref, onMounted } from 'vue'
 import QuizService from '@/services/quiz.service'
 import { useRouter } from 'vue-router'
+import { useDialog } from 'primevue/usedialog'
+import QuizDialog from '@/components/dialogs/QuizDialog.vue'
 interface Quiz {
   id: number
   title: string
@@ -29,6 +31,51 @@ const loadQuizzes = async () => {
 }
 
 const router = useRouter()
+const dialog = useDialog()
+
+const openEditQuizDialog = (quiz: Quiz) => {
+  dialog.open(QuizDialog, {
+    data: {
+      quiz,
+    },
+
+    props: {
+      header: 'Edit Quiz',
+      modal: true,
+      style: {
+        width: '85rem',
+      },
+      closable: true,
+      dismissableMask: true,
+    },
+
+    onClose: (options) => {
+      if (options?.data?.saved) {
+        loadQuizzes()
+      }
+    },
+  })
+}
+
+const openAddQuizDialog = () => {
+  dialog.open(QuizDialog, {
+    props: {
+      header: 'Create Quiz',
+      modal: true,
+      style: {
+        width: '55rem',
+      },
+      closable: true,
+      dismissableMask: true,
+    },
+
+    onClose: (options) => {
+      if (options?.data?.saved) {
+        loadQuizzes()
+      }
+    },
+  })
+}
 
 const startQuiz = (quizId: number) => {
   router.push({
@@ -48,7 +95,21 @@ onMounted(() => {
 
     <div class="hero">
 
-      <Button icon="pi pi-refresh" label="Refresh" @click="loadQuizzes" />
+      <div>
+        <h1>Quizzes</h1>
+
+        <p>
+          Manage and participate in available quizzes.
+        </p>
+      </div>
+
+      <div class="hero-buttons">
+
+        <Button icon="pi pi-plus" label="Add Quiz" class="add-btn" @click="openAddQuizDialog" />
+
+        <Button icon="pi pi-refresh" label="Refresh" severity="secondary" outlined @click="loadQuizzes" />
+
+      </div>
 
     </div>
 
@@ -100,7 +161,13 @@ onMounted(() => {
 
         <template #footer>
 
-          <Button label="Start Quiz" icon="pi pi-play" class="start-btn" @click="startQuiz(quiz.id)" />
+          <div class="card-buttons">
+
+            <Button label="Start" icon="pi pi-play" class="start-btn" @click="startQuiz(quiz.id)" />
+
+            <Button label="Edit" icon="pi pi-pencil" severity="warning" outlined @click="openEditQuizDialog(quiz)" />
+
+          </div>
 
         </template>
 
@@ -276,5 +343,40 @@ onMounted(() => {
 :deep(.p-card) {
 
   background: white;
+}
+
+.hero-buttons {
+
+  display: flex;
+
+  gap: 15px;
+
+  align-items: center;
+}
+
+.add-btn {
+
+  background: linear-gradient(90deg, #067647, #12b76a);
+
+  border: none;
+
+  color: white;
+}
+
+.add-btn:hover {
+
+  background: linear-gradient(90deg, #055d39, #0fa15d);
+}
+
+.card-buttons {
+
+  display: flex;
+
+  gap: 12px;
+}
+
+.card-buttons .p-button {
+
+  flex: 1;
 }
 </style>
