@@ -8,6 +8,11 @@ import { onMounted } from 'vue'
 import McqService from '@/services/mcq.service'
 import { useDialog } from 'primevue/usedialog'
 import McqDialog from './McqDialog.vue'
+import { useConfirm } from 'primevue/useconfirm'
+import { useToast } from 'primevue/usetoast'
+
+const confirm = useConfirm()
+const toast = useToast()
 const dialogRef: any = inject('dialogRef')
 
 const loading = ref(false)
@@ -18,6 +23,57 @@ interface Mcq {
   enable: boolean
 }
 const mcqs = ref<Mcq[]>([])
+
+const confirmDeleteMcq = (
+  event: Event,
+  mcq: Mcq,
+) => {
+  confirm.require({
+    target: event.currentTarget as HTMLElement,
+
+    message: 'Are you sure you want to delete this MCQ?',
+
+    header: 'Delete MCQ',
+
+    icon: 'pi pi-exclamation-triangle',
+
+    rejectProps: {
+      label: 'Cancel',
+      severity: 'secondary',
+      outlined: true,
+    },
+
+    acceptProps: {
+      label: 'Delete',
+      severity: 'danger',
+    },
+
+    accept: async () => {
+      try {
+        await McqService.deleteMcq(mcq.id)
+
+        toast.add({
+          severity: 'success',
+          summary: 'Deleted',
+          detail: 'MCQ deleted successfully.',
+          life: 3000,
+        })
+
+        loadMcqs()
+      } catch (error) {
+        console.error(error)
+
+        toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Unable to delete MCQ.',
+          life: 3000,
+        })
+      }
+    },
+  })
+}
+
 const loadMcqs = async () => {
   if (!isEdit.value) return
 
@@ -120,6 +176,8 @@ const saveQuiz = async () => {
 </script>
 
 <template>
+  <Toast />
+  <ConfirmPopup />
   <div class="dialog-container">
 
     <h2>
@@ -130,10 +188,7 @@ const saveQuiz = async () => {
 
       <label>Quiz Title</label>
 
-      <InputText
-        v-model="quiz.title"
-        fluid
-      />
+      <InputText v-model="quiz.title" fluid />
 
     </div>
 
@@ -141,10 +196,7 @@ const saveQuiz = async () => {
 
       <label>Total Time (Minutes)</label>
 
-      <InputNumber
-        v-model="quiz.total_time"
-        fluid
-      />
+      <InputNumber v-model="quiz.total_time" fluid />
 
     </div>
 
@@ -152,152 +204,136 @@ const saveQuiz = async () => {
 
       <label>Passing Marks</label>
 
-      <InputNumber
-        v-model="quiz.passing_marks"
-        fluid
-      />
+      <InputNumber v-model="quiz.passing_marks" fluid />
 
     </div>
 
-    <Button
-      class="save-btn"
-      :loading="loading"
-      :label="isEdit ? 'Update Quiz' : 'Create Quiz'"
-      icon="pi pi-check"
-      @click="saveQuiz"
-    />
-<div
-  v-if="isEdit"
-  class="mcq-section"
->
-  <div class="mcq-header">
+    <Button class="save-btn" :loading="loading" :label="isEdit ? 'Update Quiz' : 'Create Quiz'" icon="pi pi-check"
+      @click="saveQuiz" />
+    <div v-if="isEdit" class="mcq-section">
+      <div class="mcq-header">
 
-    <h3>MCQs</h3>
+        <h3>MCQs</h3>
 
-    <Button
-      label="Add MCQ"
-      icon="pi pi-plus"
-      severity="success"
-      @click="openAddMcqDialog"
-    />
+        <Button label="Add MCQ" icon="pi pi-plus" severity="success" @click="openAddMcqDialog" />
 
-  </div>
+      </div>
 
-  <DataTable
-    :value="mcqs"
-    stripedRows
-  >
+      <DataTable :value="mcqs" stripedRows>
 
-    <Column
-      field="question"
-      header="Question"
-    />
+        <Column field="question" header="Question" />
 
-    <Column
-      header="Status"
-    >
-      <template #body="{ data }">
+        <Column header="Status">
+          <template #body="{ data }">
 
-        <Tag
-          :value="data.enable ? 'Enabled' : 'Disabled'"
-          :severity="data.enable ? 'success' : 'danger'"
-        />
+            <Tag :value="data.enable ? 'Enabled' : 'Disabled'" :severity="data.enable ? 'success' : 'danger'" />
 
-      </template>
-    </Column>
+          </template>
+        </Column>
 
-    <Column
-      header="Actions"
-    >
-      <template #body="{ data }">
+        <Column header="Actions"  headerStyle="text-align:center; width:120px;">
+          <template #body="{ data }">
 
-        <Button
-          icon="pi pi-pencil"
-          severity="warning"
-          rounded
-          outlined
-          @click="openEditMcqDialog(data)"
-        />
+            <div class="action-buttons">
 
-      </template>
-    </Column>
+              <Button icon="pi pi-pencil" severity="warning" rounded outlined v-tooltip.top="'Edit'"
+                @click="openEditMcqDialog(data)" />
 
-  </DataTable>
+              <Button icon="pi pi-trash" severity="danger" rounded outlined v-tooltip.top="'Delete'"
+                @click="confirmDeleteMcq($event, data)" />
 
-</div>
+            </div>
+
+          </template>
+        </Column>
+
+      </DataTable>
+
+    </div>
   </div>
 </template>
 
 <style scoped>
+.dialog-container {
 
-.dialog-container{
+  display: flex;
 
-    display:flex;
+  flex-direction: column;
 
-    flex-direction:column;
+  gap: 20px;
 
-    gap:20px;
-
-    padding:10px;
+  padding: 10px;
 }
 
-h2{
+h2 {
 
-    color:#067647;
+  color: #067647;
 
-    text-align:center;
+  text-align: center;
 }
 
-.field{
+.field {
 
-    display:flex;
+  display: flex;
 
-    flex-direction:column;
+  flex-direction: column;
 
-    gap:8px;
+  gap: 8px;
 }
 
-label{
+label {
 
-    color:#344054;
+  color: #344054;
 
-    font-weight:600;
+  font-weight: 600;
 }
 
-.save-btn{
+.save-btn {
 
-    margin-top:10px;
+  margin-top: 10px;
 
-    background:#12b76a;
+  background: #12b76a;
 
-    border:none;
-}
-.mcq-section{
-
-    margin-top:35px;
-
-    border-top:1px solid #e5e7eb;
-
-    padding-top:25px;
+  border: none;
 }
 
-.mcq-header{
+.mcq-section {
 
-    display:flex;
+  margin-top: 35px;
 
-    justify-content:space-between;
+  border-top: 1px solid #e5e7eb;
 
-    align-items:center;
-
-    margin-bottom:20px;
+  padding-top: 25px;
 }
 
-.mcq-header h3{
+.mcq-header {
 
-    color:#067647;
+  display: flex;
 
-    font-size:22px;
+  justify-content: space-between;
 
-    font-weight:700;
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.mcq-header h3 {
+
+  color: #067647;
+
+  font-size: 22px;
+
+  font-weight: 700;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.action-buttons .p-button {
+  width: 36px;
+  height: 36px;
 }
 </style>

@@ -16,6 +16,7 @@ declare module 'vue' {
     Card: typeof import('primevue/card')['default']
     Checkbox: typeof import('primevue/checkbox')['default']
     Column: typeof import('primevue/column')['default']
+    ConfirmPopup: typeof import('primevue/confirmpopup')['default']
     DataTable: typeof import('primevue/datatable')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     InputNumber: typeof import('primevue/inputnumber')['default']
@@ -34,6 +35,9 @@ declare module 'vue' {
     Toast: typeof import('primevue/toast')['default']
     ToggleSwitch: typeof import('primevue/toggleswitch')['default']
   }
+  export interface GlobalDirectives {
+    Tooltip: typeof import('primevue/tooltip')['default']
+  }
 }
 
 // For TSX support
@@ -42,6 +46,7 @@ declare global {
   const Card: typeof import('primevue/card')['default']
   const Checkbox: typeof import('primevue/checkbox')['default']
   const Column: typeof import('primevue/column')['default']
+  const ConfirmPopup: typeof import('primevue/confirmpopup')['default']
   const DataTable: typeof import('primevue/datatable')['default']
   const Header: typeof import('./src/components/Header.vue')['default']
   const InputNumber: typeof import('primevue/inputnumber')['default']
