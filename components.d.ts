@@ -12,12 +12,17 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Accordion: typeof import('primevue/accordion')['default']
+    AccordionContent: typeof import('primevue/accordioncontent')['default']
+    AccordionHeader: typeof import('primevue/accordionheader')['default']
+    AccordionPanel: typeof import('primevue/accordionpanel')['default']
     Button: typeof import('primevue/button')['default']
     Card: typeof import('primevue/card')['default']
     Checkbox: typeof import('primevue/checkbox')['default']
     Column: typeof import('primevue/column')['default']
     ConfirmPopup: typeof import('primevue/confirmpopup')['default']
     DataTable: typeof import('primevue/datatable')['default']
+    Divider: typeof import('primevue/divider')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     InputNumber: typeof import('primevue/inputnumber')['default']
     InputText: typeof import('primevue/inputtext')['default']
@@ -28,6 +33,7 @@ declare module 'vue' {
     ProgressSpinner: typeof import('primevue/progressspinner')['default']
     QuizDialog: typeof import('./src/components/dialogs/QuizDialog.vue')['default']
     RadioButton: typeof import('primevue/radiobutton')['default']
+    ResultDialog: typeof import('./src/components/dialogs/ResultDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Select: typeof import('primevue/select')['default']
@@ -44,12 +50,17 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const Accordion: typeof import('primevue/accordion')['default']
+  const AccordionContent: typeof import('primevue/accordioncontent')['default']
+  const AccordionHeader: typeof import('primevue/accordionheader')['default']
+  const AccordionPanel: typeof import('primevue/accordionpanel')['default']
   const Button: typeof import('primevue/button')['default']
   const Card: typeof import('primevue/card')['default']
   const Checkbox: typeof import('primevue/checkbox')['default']
   const Column: typeof import('primevue/column')['default']
   const ConfirmPopup: typeof import('primevue/confirmpopup')['default']
   const DataTable: typeof import('primevue/datatable')['default']
+  const Divider: typeof import('primevue/divider')['default']
   const Header: typeof import('./src/components/Header.vue')['default']
   const InputNumber: typeof import('primevue/inputnumber')['default']
   const InputText: typeof import('primevue/inputtext')['default']
@@ -60,6 +71,7 @@ declare global {
   const ProgressSpinner: typeof import('primevue/progressspinner')['default']
   const QuizDialog: typeof import('./src/components/dialogs/QuizDialog.vue')['default']
   const RadioButton: typeof import('primevue/radiobutton')['default']
+  const ResultDialog: typeof import('./src/components/dialogs/ResultDialog.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
   const Select: typeof import('primevue/select')['default']
