@@ -30,10 +30,12 @@ declare module 'vue' {
     RadioButton: typeof import('primevue/radiobutton')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Select: typeof import('primevue/select')['default']
     Tag: typeof import('primevue/tag')['default']
     Textarea: typeof import('primevue/textarea')['default']
     Toast: typeof import('primevue/toast')['default']
     ToggleSwitch: typeof import('primevue/toggleswitch')['default']
+    UserDialog: typeof import('./src/components/dialogs/UserDialog.vue')['default']
   }
   export interface GlobalDirectives {
     Tooltip: typeof import('primevue/tooltip')['default']
@@ -60,8 +62,10 @@ declare global {
   const RadioButton: typeof import('primevue/radiobutton')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
+  const Select: typeof import('primevue/select')['default']
   const Tag: typeof import('primevue/tag')['default']
   const Textarea: typeof import('primevue/textarea')['default']
   const Toast: typeof import('primevue/toast')['default']
   const ToggleSwitch: typeof import('primevue/toggleswitch')['default']
+  const UserDialog: typeof import('./src/components/dialogs/UserDialog.vue')['default']
 }
