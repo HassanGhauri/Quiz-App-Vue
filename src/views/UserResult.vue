@@ -133,3 +133,165 @@ onMounted(loadResults)
 
   </div>
 </template>
+
+<style scoped>
+
+.results-page {
+
+    min-height: 100vh;
+
+    background: #f8fffb;
+
+    padding: 40px;
+}
+
+.hero {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 35px;
+}
+
+.hero h1 {
+
+    color: #067647;
+
+    font-size: 40px;
+
+    font-weight: 800;
+
+    margin: 0;
+}
+
+.hero p {
+
+    color: #667085;
+
+    margin-top: 8px;
+
+    font-size: 17px;
+}
+
+:deep(.p-datatable) {
+
+    background: white;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    border: 1px solid #d7f5e5;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.06);
+}
+
+:deep(.p-datatable-header) {
+
+    background: white;
+
+    border-bottom: 1px solid #e4f4ea;
+}
+
+:deep(.p-datatable-thead > tr > th) {
+
+    background: #067647;
+
+    color: white;
+
+    font-weight: 700;
+
+    padding: 16px;
+
+    border: none;
+}
+
+:deep(.p-datatable-tbody > tr) {
+
+    transition: .25s;
+}
+
+:deep(.p-datatable-tbody > tr:hover) {
+
+    background: #f2fff7;
+}
+
+:deep(.p-datatable-tbody > tr > td) {
+
+    padding: 16px;
+
+    color: #344054;
+
+    border-bottom: 1px solid #eef4ef;
+}
+
+:deep(.p-paginator) {
+
+    border-top: 1px solid #eef4ef;
+
+    background: white;
+}
+
+:deep(.p-tag-success) {
+
+    background: #12b76a;
+
+    color: white;
+}
+
+:deep(.p-tag-danger) {
+
+    background: #ef4444;
+
+    color: white;
+}
+
+:deep(.p-button-info) {
+
+    background: #12b76a;
+
+    border-color: #12b76a;
+}
+
+:deep(.p-button-info:hover) {
+
+    background: #067647;
+
+    border-color: #067647;
+}
+
+:deep(.p-button-outlined) {
+
+    color: #067647;
+
+    border-color: #067647;
+}
+
+:deep(.p-button-outlined:hover) {
+
+    background: #067647;
+
+    color: white;
+}
+
+:deep(.p-paginator-page.p-paginator-page-selected) {
+
+    background: #12b76a;
+
+    color: white;
+}
+
+:deep(.p-paginator-page:hover) {
+
+    background: #ecfdf3;
+}
+
+:deep(.p-column-title) {
+
+    font-weight: 700;
+}
+
+</style>
