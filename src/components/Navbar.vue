@@ -14,11 +14,6 @@ const items = ref([
     to: '/quizzes',
   },
   {
-    label: 'Settings',
-    icon: 'pi pi-cog',
-    to: '/settings',
-  },
-  {
     label: 'User Results',
     icon: 'pi pi-chart-line',
     to: '/user-results',

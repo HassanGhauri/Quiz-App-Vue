@@ -6,7 +6,6 @@ import Quiz from '@/views/Quiz.vue'
 
 import MainLayout from '@/layouts/MainLayout.vue'
 import Quizzes from '@/views/Quizzes.vue'
-import Settings from '@/views/Settings.vue'
 import Users from '@/views/Users.vue'
 import UserResult from '@/views/UserResult.vue'
 import Profile from '@/views/Profile.vue'
@@ -31,10 +30,6 @@ const routes = [
       {
         path: 'quizzes',
         component:  Quizzes,
-      },
-      {
-        path: 'settings',
-        component: Settings,
       },
       {
         path: 'users',

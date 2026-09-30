@@ -29,6 +29,22 @@ const loading = ref(false)
 // LOGIN
 // ======================
 
+const continueAsGuest = async () => {
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      id: 0,
+      first_name: 'Guest',
+      last_name: 'User',
+      email: null,
+      role: 'guest',
+      is_guest: true,
+    }),
+  )
+
+  await router.push('/quizzes')
+}
+
 const login = async () => {
   if (!email.value.trim()) {
     toast.add({
@@ -196,26 +212,21 @@ const login = async () => {
         ======================= -->
 
         <div class="divider">
-          <span>or continue with</span>
+          <span>or continue as</span>
         </div>
 
         <!-- ======================
-             SOCIAL BUTTONS
+             GUEST ACCESS
         ======================= -->
 
-        <div class="social-buttons">
-          <Button outlined severity="secondary" class="social-btn">
-            <i class="pi pi-google"></i>
-
-            <span>Google</span>
-          </Button>
-
-          <Button outlined severity="secondary" class="social-btn">
-            <i class="pi pi-microsoft"></i>
-
-            <span>Microsoft</span>
-          </Button>
-        </div>
+        <Button
+          label="Continue as Guest"
+          icon="pi pi-user"
+          outlined
+          severity="secondary"
+          class="guest-btn"
+          @click="continueAsGuest"
+        />
         <!-- ======================
              SIGNUP
         ======================= -->
@@ -796,42 +807,23 @@ const login = async () => {
    SOCIAL BUTTONS
 ========================= */
 
-.social-buttons {
-  display: flex;
-
-  gap: 16px;
-
+.guest-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 15px;
+  border: 1px solid #d0d5dd;
+  background: white;
+  color: #344054;
+  font-size: 15px;
+  font-weight: 600;
   position: relative;
   z-index: 3;
-}
-
-.social-buttons button {
-  flex: 1;
-
-  padding: 14px;
-
-  border-radius: 15px;
-
-  border: 1px solid #d0d5dd;
-
-  background: white;
-
-  color: #344054;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
   transition: 0.3s;
 }
 
-.social-buttons button:hover {
+.guest-btn:hover {
   border-color: #0d9b63;
-
   color: #0d9b63;
-
   transform: translateY(-2px);
 }
 

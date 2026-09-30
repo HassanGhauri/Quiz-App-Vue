@@ -1,48 +1,38 @@
-# quiz-app-vue
+# Crescent Quizzes Frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+Crescent Quizzes is a quiz platform for browsing quizzes, answering multiple-choice questions, and reviewing account and result information. This Vue 3 application provides the user interface and communicates with the Laravel API.
 
-## Recommended IDE Setup
+## Requirements
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Node.js `20.19+` or `22.12+`
+- npm
+- The Laravel backend running at `http://localhost:8000`
 
-## Recommended Browser Setup
+The API base URL is currently configured in `src/services/api.ts` as `http://localhost:8000/api/cqs`.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## Install
 
-## Type Support for `.vue` Imports in TS
+From this directory (`quiz-app-vue`), install the frontend dependencies:
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+```powershell
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+## Run in Development
 
-```sh
+Start the Laravel backend first, then run the frontend in a separate terminal:
+
+```powershell
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+Vite prints the local development URL, usually `http://localhost:5173`.
 
-```sh
+## Build and Check
+
+```powershell
+npm run type-check
 npm run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+The production build is written to `dist/`.

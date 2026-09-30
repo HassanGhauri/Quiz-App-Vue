@@ -164,10 +164,10 @@ const finishQuiz = async () => {
   if (timer) {
     clearInterval(timer)
   }
+  const user = JSON.parse(localStorage.getItem('user') || 'null')
+
   const payload = {
-    user_id: localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user')!).id
-      : 1,
+    user_id: user?.id ?? 1,
 
     quiz_id: quizId,
 
